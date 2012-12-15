@@ -35,7 +35,7 @@ public class HttpComponentsTest {
         HttpRequestExecutor httpexecutor = new HttpRequestExecutor();
 
         HttpContext context = new BasicHttpContext(null);
-        HttpHost host = new HttpHost("neidetcher.blogspot.com", 80);
+        HttpHost host = new HttpHost("localhost", 8000);
 
         DefaultHttpClientConnection conn = new DefaultHttpClientConnection();
         ConnectionReuseStrategy connStrategy = new DefaultConnectionReuseStrategy();
@@ -45,9 +45,7 @@ public class HttpComponentsTest {
 
         try {
 
-            String[] targets = { "/" };//,
-                    //"/servlets-examples/servlet/RequestInfoExample",
-                    //"/somewhere%20in%20pampa"};
+            String[] targets = { "/time", "/ip" };
 
             for (int i = 0; i < targets.length; i++) {
                 if (!conn.isOpen()) {
