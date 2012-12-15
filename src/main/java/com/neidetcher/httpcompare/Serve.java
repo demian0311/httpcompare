@@ -1,7 +1,6 @@
 package com.neidetcher.httpcompare;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 
@@ -61,15 +60,86 @@ public class Serve {
     
     static class IpHandler extends HandlerHelper implements HttpHandler{
         public void handle(HttpExchange t) throws IOException {
-        	sendString(t.getRemoteAddress().toString(), t);
+        	sendString("\t\"origin\": \"" + t.getRemoteAddress().toString() + "\"", t);
         }
     }
     static class HandlerHelper{
-    	public void sendString(String response, HttpExchange t) throws IOException{
+    	public void sendString(String responseIn, HttpExchange t) throws IOException{
+    		String response = "{\n" + responseIn + "\n}";
             t.sendResponseHeaders(200, response.length());
             OutputStream os = t.getResponseBody();
             os.write(response.getBytes());
             os.close();	
     	}
     }
+    
+    // user-agent
+    // {
+    // "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11"
+    // }
+
+// headers
+//    {
+//    	  "headers": {
+//    	    "Content-Length": "",
+//    	    "Accept-Language": "en-US,en;q=0.8",
+//    	    "Accept-Encoding": "gzip,deflate,sdch",
+//    	    "Host": "httpbin.org",
+//    	    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+//    	    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11",
+//    	    "Accept-Charset": "ISO-8859-1,utf-8;q=0.7,*;q=0.3",
+//    	    "Connection": "keep-alive",
+//    	    "Referer": "http://httpbin.org/",
+//    	    "Content-Type": ""
+//    	  }
+//    	}
+    
+    // get
+//    {
+//    	  "url": "http://httpbin.org/get",
+//    	  "headers": {
+//    	    "Content-Length": "",
+//    	    "Accept-Language": "en-US,en;q=0.8",
+//    	    "Accept-Encoding": "gzip,deflate,sdch",
+//    	    "Host": "httpbin.org",
+//    	    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+//    	    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11",
+//    	    "Accept-Charset": "ISO-8859-1,utf-8;q=0.7,*;q=0.3",
+//    	    "Connection": "keep-alive",
+//    	    "Referer": "http://httpbin.org/",
+//    	    "Content-Type": ""
+//    	  },
+//    	  "args": {},
+//    	  "origin": "70.188.122.53"
+//    	}
+
+    // http://httpbin.org/status/500
+    // just returns status, no content
+    
+    // delay  http://httpbin.org/delay/3
+//    {
+//    	  "origin": "70.188.122.53",
+//    	  "files": {},
+//    	  "form": {},
+//    	  "headers": {
+//    	    "Content-Length": "",
+//    	    "Accept-Language": "en-US,en;q=0.8",
+//    	    "Accept-Encoding": "gzip,deflate,sdch",
+//    	    "Host": "httpbin.org",
+//    	    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+//    	    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11",
+//    	    "Accept-Charset": "ISO-8859-1,utf-8;q=0.7,*;q=0.3",
+//    	    "Connection": "keep-alive",
+//    	    "Referer": "http://httpbin.org/",
+//    	    "Content-Type": ""
+//    	  },
+//    	  "url": "http://httpbin.org/delay/3",
+//    	  "args": {},
+//    	  "data": ""
+//    	}
+    
+//    /post Returns POST data.
+//    /put Returns PUT data.
+//    /delete Returns DELETE data
+    
 }
