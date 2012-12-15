@@ -1,3 +1,6 @@
-here's a good API to hit for free
+This project is to play with HTTP clients on the JVM.
 
-https://api.duckduckgo.com/?q=define+virgin&format=json&pretty=1
+To start up the local server
+```
+mvn exec:java
+```
