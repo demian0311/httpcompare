@@ -1,4 +1,3 @@
-httpcompare
-===========
+here's a good API to hit for free
 
-Compare some JVM HTTP Clients
+https://api.duckduckgo.com/?q=define+virgin&format=json&pretty=1
