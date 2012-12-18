@@ -23,8 +23,23 @@ public class Serve {
         server.createContext("/test", new TestHandler());
         server.createContext("/time", new TimeHandler());
         server.createContext("/ip", new IpHandler());
+        //server.createContext("user-agent", new UserAgentHandler());
+        server.createContext("/headers", new HeadersHandler());
         server.setExecutor(null); // creates a default executor
         server.start();
+    }
+    
+    static class HeadersHandler extends HandlerHelper implements HttpHandler{
+    	public void handle(HttpExchange httpExchange) throws IOException{
+    		StringBuffer sb = new StringBuffer("\t\"headers\": {");
+        	
+    		Headers headers = httpExchange.getRequestHeaders();
+        	for(String currKey : headers.keySet()){
+        		sb.append("\n\t\t\"" + currKey + "\": \"" + headers.get(currKey) + "\"");
+        	}
+        	sb.append("\t}");
+        	sendString(sb.toString(), httpExchange);
+    	}
     }
     
     static class TestHandler extends HandlerHelper implements HttpHandler {
@@ -63,6 +78,17 @@ public class Serve {
         	sendString("\t\"origin\": \"" + t.getRemoteAddress().toString() + "\"", t);
         }
     }
+    // TODO
+    static class UserAgentHandler extends HandlerHelper implements HttpHandler{
+		@Override
+		public void handle(HttpExchange t) throws IOException {
+			// TODO Auto-generated method stub
+			/// "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11"
+			sendString("\tuser-agent: \"" + "TODO!", t);
+		}
+    	
+    }
+    
     static class HandlerHelper{
     	public void sendString(String responseIn, HttpExchange t) throws IOException{
     		String response = "{\n" + responseIn + "\n}";
@@ -78,21 +104,6 @@ public class Serve {
     // "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11"
     // }
 
-// headers
-//    {
-//    	  "headers": {
-//    	    "Content-Length": "",
-//    	    "Accept-Language": "en-US,en;q=0.8",
-//    	    "Accept-Encoding": "gzip,deflate,sdch",
-//    	    "Host": "httpbin.org",
-//    	    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-//    	    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.97 Safari/537.11",
-//    	    "Accept-Charset": "ISO-8859-1,utf-8;q=0.7,*;q=0.3",
-//    	    "Connection": "keep-alive",
-//    	    "Referer": "http://httpbin.org/",
-//    	    "Content-Type": ""
-//    	  }
-//    	}
     
     // get
 //    {
