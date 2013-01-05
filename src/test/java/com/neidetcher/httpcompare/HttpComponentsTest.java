@@ -1,4 +1,4 @@
-package com.neidetcher.httpcompare.apache;
+package com.neidetcher.httpcompare;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -11,11 +11,12 @@ import org.apache.http.message.BasicHttpRequest;
 import org.apache.http.params.*;
 import org.apache.http.protocol.*;
 import org.apache.http.util.EntityUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class HttpComponentsTest {
 
-	@Test
+	@Ignore @Test
 	public void testGet() throws UnknownHostException, IOException, HttpException {
 		HttpParams params = new SyncBasicHttpParams();
         HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);

@@ -1,4 +1,4 @@
-package com.neidetcher.httpcompare.apache;
+package com.neidetcher.httpcompare;
 
 import java.io.IOException;
 
