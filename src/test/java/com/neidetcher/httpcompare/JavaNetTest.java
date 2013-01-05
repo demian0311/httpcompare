@@ -14,6 +14,11 @@ import org.junit.Test;
  */
 public class JavaNetTest {
 	
+	private static String URL = "http://weather.yahooapis.com/forecastrss?w=12788310";
+
+	/**
+	 * Note that we can't set the pool size in the java.net implementation.
+	 */
 	private HttpURLConnection createClient(String url, int poolSize, int timeout) throws Throwable {
 		HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
 		con.setConnectTimeout(timeout);
@@ -23,9 +28,7 @@ public class JavaNetTest {
 	
 	@Test public void testFoo() throws Throwable, IOException {
 		
-		HttpURLConnection client = createClient(
-				"http://weather.yahooapis.com/forecastrss?w=12788310", 
-				200, 1000);
+		HttpURLConnection client = createClient(URL, 200, 1000);
 		int responseCode = client.getResponseCode();
 		System.out.println("response: " + responseCode);
 		InputStream content = (InputStream)client.getContent();

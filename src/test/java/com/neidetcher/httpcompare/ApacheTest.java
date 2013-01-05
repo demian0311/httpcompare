@@ -20,6 +20,8 @@ import org.junit.Test;
  */
 public class ApacheTest {
 	
+	private static String URL = "http://weather.yahooapis.com/forecastrss?w=12788310";
+	
 	private HttpClient createClient(int poolSize, int timeout) {
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
 		schemeRegistry.register(
@@ -46,7 +48,7 @@ public class ApacheTest {
 	
 	@Test public void testFoo() throws Throwable, IOException {
 		HttpClient client = createClient(200, 1000);
-		HttpUriRequest request = new HttpGet("http://weather.yahooapis.com/forecastrss?w=12788310");
+		HttpUriRequest request = new HttpGet(URL);
 		HttpResponse response = client.execute(request);
 		System.out.println("response: " + response.getStatusLine());
 		System.out.println(EntityUtils.toString(response.getEntity()));
