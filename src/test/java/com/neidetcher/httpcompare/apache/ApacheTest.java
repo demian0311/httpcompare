@@ -18,7 +18,7 @@ import org.junit.Test;
 /**
  * This requires a live connection
  */
-public class WeatherTest {
+public class ApacheTest {
 	
 	private HttpClient createClient(int poolSize, int timeout) {
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
