@@ -28,19 +28,9 @@ public class ApacheTest {
 		         new Scheme("http", 80, PlainSocketFactory.getSocketFactory()));
 
 		PoolingClientConnectionManager cm = new PoolingClientConnectionManager(schemeRegistry);
-		// https://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/impl/conn/PoolingClientConnectionManager.html
 		cm.setDefaultMaxPerRoute(poolSize);
-		 
 		HttpClient httpClient = new DefaultHttpClient(cm);
-		// https://hc.apache.org/httpcomponents-core-ga/httpcore/apidocs/org/apache/http/params/CoreConnectionPNames.html
-		
-		// Determines the timeout in milliseconds until a connection is 
-		// established.
 		httpClient.getParams().setParameter(HttpConnectionParams.CONNECTION_TIMEOUT, timeout);
-		
-		// Defines the socket timeout (SO_TIMEOUT) in milliseconds, which is 
-		// the timeout for waiting for data or, put differently, a maximum 
-		// period inactivity between two consecutive data packets).
 		httpClient.getParams().setParameter(HttpConnectionParams.SO_TIMEOUT, timeout);
 		
 		return httpClient;
