@@ -39,7 +39,9 @@ public class ApacheTest {
 	@Test public void testFoo() throws Throwable, IOException {
 		HttpClient client = createClient(200, 1000);
 		HttpUriRequest request = new HttpGet(URL);
+		Timer timer = new Timer("YAHOO-WEATHER");
 		HttpResponse response = client.execute(request);
+		System.out.println(timer.stop());
 		System.out.println("response: " + response.getStatusLine());
 		System.out.println(EntityUtils.toString(response.getEntity()));
 	}
