@@ -7,7 +7,6 @@ public class Timer {
 	
 	public Timer(String nameIn) {
 		name = nameIn;
-		//start = System.currentTimeMillis();
 	}
 	
 	public String stop() {
