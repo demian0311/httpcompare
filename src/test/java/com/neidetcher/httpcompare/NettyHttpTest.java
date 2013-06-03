@@ -2,7 +2,6 @@ package com.neidetcher.httpcompare;
 
 import java.net.InetSocketAddress;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.concurrent.Executors;
 
 import org.jboss.netty.bootstrap.ClientBootstrap;
@@ -20,6 +19,12 @@ import org.junit.Test;
 public class NettyHttpTest {
 
     private static String URL = "http://weather.yahooapis.com/forecastrss?w=12788310";
+    
+    private void createClient(String url, int poolSize, int timeout) {
+        
+    }
+    
+    
 
     @Test
     public void testFoo() throws Throwable {

@@ -21,6 +21,12 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>14.0.1</version>
+        </dependency>
+
         <!-- Apache HTTP Components HTTPClient -->
         <!-- https://hc.apache.org/httpcomponents-client-ga/download.html -->
         <dependency>

@@ -24,7 +24,8 @@ import com.twitter.finagle.http.codec.ChannelBufferUsageTracker;
 import org.junit.Test;
 
 /**
- * This requires a live connection
+ * Theoretically this should work in Java but I can only find good examples in 
+ * Scala.
  */
 public class FinagleTest {
 	
