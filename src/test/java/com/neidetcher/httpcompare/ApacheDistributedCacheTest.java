@@ -2,7 +2,9 @@ package com.neidetcher.httpcompare;
 
 import java.io.IOException;
 import java.util.concurrent.Callable;
-import static java.util.concurrent.TimeUnit.MINUTES;
+
+import net.rubyeye.xmemcached.MemcachedClient;
+import net.rubyeye.xmemcached.XMemcachedClient;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -16,32 +18,36 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.util.EntityUtils;
 import org.junit.Test;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-
 /**
  * This requires a live connection
  */
-public class ApacheInMemoryCacheTest {
+public class ApacheDistributedCacheTest {
 
     private static String URL_BASE = "http://weather.yahooapis.com/forecastrss?w=";
     private static int POOL_SIZE = 200;
     private static int TIMEOUT = 1000;
 
     private HttpClient client = null;
-    private Cache<String, String> cache = null;
-
-    // lazily create the cache
-    private Cache<String, String> getCache() {
+    private MemcachedClient cache = null;
+    
+    private static String CACHE_HOST="localhost";
+    private static int CACHE_PORT=11211;
+    private static int CACHE_TTL=5; // seconds
+    
+    
+    private MemcachedClient getCache() {
         if (cache == null) {
-            cache = CacheBuilder.newBuilder()
-                    .expireAfterAccess(10, MINUTES)
-                    .maximumSize(1000)
-                    .initialCapacity(100).build();
+            try {
+                cache = new XMemcachedClient(
+                        CACHE_HOST, CACHE_PORT);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return cache;
     }
-
+    
+    
     // lazily create the http client
     private HttpClient getClient() {
         if (client == null) {
@@ -62,19 +68,13 @@ public class ApacheInMemoryCacheTest {
 
         return client;
     }
+    
 
-    /**
-     * This callable is for Guava caching.  This is where we would 
-     * do the real work to get the data over the network.
-     */
-    private class GetWeather implements Callable<String> {
-        private HttpGet url = null;
+    private String getWeather(String location) throws Exception {
+        String body = getCache().get(location);
 
-        public GetWeather(String locationIn) {
-            url = new HttpGet(URL_BASE + locationIn);
-        }
-
-        public String call() throws Exception {
+        if (body == null) {
+            HttpGet url = new HttpGet(URL_BASE + location);
             HttpResponse response = getClient().execute(url);
 
             int statusCode = response.getStatusLine().getStatusCode();
@@ -82,24 +82,19 @@ public class ApacheInMemoryCacheTest {
                 throw new Exception("got a bad status: " + statusCode);
             }
 
-            String body = EntityUtils.toString(response.getEntity());
+            body = EntityUtils.toString(response.getEntity());
+
+            // we think it's a good result so we'll store it
+            System.out.println("adding to cache");
+            getCache().set(location, CACHE_TTL, body);
+
+            // we throw an exception here but we still wanted
+            // the results cached
             if (body.contains("City not found")) {
                 throw new Exception("couldn't find city");
             }
-
-            return body;
         }
-    }
-
-    private String getWeather(String location) {
-        try {
-            return getCache().get(
-                    location, 
-                    new GetWeather(location));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        return body;
     }
 
     @Test
@@ -111,7 +106,5 @@ public class ApacheInMemoryCacheTest {
             System.out.println(i + "|" + timer.stop() + "|result: " 
                     + result.substring(0, 40) + "...");
         }
-        
-        System.out.println("hit rate: " + getCache().stats().hitRate());
     }
 }
